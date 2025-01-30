@@ -1,0 +1,86 @@
+/* General Styling */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+.pos-container {
+    max-width: 600px;
+    margin: 50px auto;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    text-align: center;
+}
+
+h1 {
+    font-size: 36px;
+    color: #2a7f62;
+    margin-bottom: 20px;
+}
+
+h2 {
+    font-size: 24px;
+    color: #555;
+    margin-bottom: 20px;
+}
+
+.service-list {
+    margin-bottom: 30px;
+}
+
+.service-item {
+    margin: 10px 0;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.service-item label {
+    margin-left: 10px;
+}
+
+input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+/* Total Section */
+.total-section {
+    margin-top: 20px;
+}
+
+button {
+    background-color: #2a7f62;
+    color: white;
+    font-size: 18px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #218c53;
+}
+
+#checkoutButton:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+#totalPrice {
+    color: #e74c3c;
+    font-weight: bold;
+}

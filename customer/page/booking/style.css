@@ -1,0 +1,97 @@
+/* styles.css */
+
+/* Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+body {
+    background-color: #fbe9f9; /* Soft pink background */
+    color: #333;
+    font-size: 16px;
+}
+
+h1 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #E91E63; /* Bold pink color */
+    text-align: center;
+}
+
+/* Container for the confirmation page */
+.confirmation-container {
+    max-width: 800px;
+    margin: 50px auto;
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+}
+
+.booking-details {
+    margin-top: 30px;
+}
+
+.booking-details p {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+}
+
+.booking-details strong {
+    color: #E91E63; /* Bold pink for emphasis */
+}
+
+#bookingId, #customerName, #customerPhone, #customerEmail, #totalPrice, #bookingDate {
+    font-weight: normal;
+    color: #555;
+}
+
+/* Total Price styling */
+#totalPrice {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #FF4081; /* Lighter pink for total price */
+}
+
+/* Button styling */
+button {
+    background-color: #E91E63; /* Bold pink for the button */
+    color: #fff;
+    font-size: 1rem;
+    border: none;
+    padding: 12px 30px;
+    margin-top: 30px;
+    border-radius: 5px;
+    cursor: pointer;
+    display: block;
+    width: 100%;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #D81B60; /* Darker pink on hover */
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .confirmation-container {
+        padding: 15px;
+        margin: 20px;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    .booking-details p {
+        font-size: 1rem;
+    }
+
+    button {
+        font-size: 1.1rem;
+        padding: 10px 25px;
+    }
+}

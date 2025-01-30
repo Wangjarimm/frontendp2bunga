@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Confirmation</title>
+    <link rel="stylesheet" href="style.css"> <!-- Tautan ke file CSS Anda -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!-- SweetAlert2 -->
+    <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="SB-Mid-client-yzbioVMVKl_lTmWe"></script>
+</head>
+<body>
+
+<div class="confirmation-container">
+    <h1>Booking Confirmation</h1>
+    <p>Thank you for your booking! Here are your details:</p>
+
+    <div class="booking-details">
+        <p><strong>Booking ID:</strong> <span id="bookingId"></span></p>
+        <p><strong>Name:</strong> <span id="customerName"></span></p>
+        <p><strong>Phone:</strong> <span id="customerPhone"></span></p>
+        <p><strong>Email:</strong> <span id="customerEmail"></span></p>
+        <p><strong>Total Price:</strong> <span id="totalPrice"></span></p>
+        <p><strong>Date:</strong> <span id="bookingDate"></span></p>
+        <p><strong>Payment Deadline:</strong> <span id="paymentDeadline"></span></p>
+    </div>
+
+    <button id="payNowButton" style="display:none;">Pay Now</button>
+    <button id="returnHome">Return to Home</button>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const bookingData = JSON.parse(localStorage.getItem('latestBooking'));
+
+    if (bookingData) {
+        document.getElementById('bookingId').textContent = bookingData.booking_id;
+        document.getElementById('customerName').textContent = bookingData.name;
+        document.getElementById('customerPhone').textContent = bookingData.phone;
+        document.getElementById('customerEmail').textContent = bookingData.email;
+        document.getElementById('totalPrice').textContent = 'Rp. ' + bookingData.total_price.toLocaleString('id-ID');
+
+        // Tampilkan tanggal booking
+        const bookingDate = new Date(bookingData.date);
+        document.getElementById('bookingDate').textContent = bookingDate.toLocaleDateString('id-ID');
+
+        // Hitung Payment Deadline (1 hari dari waktu saat ini)
+        const paymentDeadline = new Date(); // Waktu saat ini
+        paymentDeadline.setDate(paymentDeadline.getDate() + 1); // Tambahkan 1 hari
+
+        // Format tanggal dengan format Indonesia
+        const paymentDeadlineDate = paymentDeadline.toLocaleDateString('id-ID');
+
+        // Format waktu dengan zona waktu Asia/Jakarta
+        const timeOptions = {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false,
+            timeZone: 'Asia/Jakarta' // WIB
+        };
+        const paymentDeadlineTime = new Intl.DateTimeFormat('id-ID', timeOptions).format(paymentDeadline);
+
+        // Gabungkan tanggal dan waktu
+        const paymentDeadlineFormatted = `${paymentDeadlineDate} ${paymentDeadlineTime}`;
+        document.getElementById('paymentDeadline').textContent = paymentDeadlineFormatted;
+
+        // Fetch API untuk membuat payment
+        fetch('https://f786-182-253-124-143.ngrok-free.app/index.php/payment/create', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                booking_id: bookingData.booking_id,
+                status: "pending",
+                gross_amount: bookingData.total_price,
+                payment_type: "credit_card", // Sesuaikan tipe pembayaran
+                customer: {
+                    name: bookingData.name,
+                    email: bookingData.email,
+                    phone: bookingData.phone,
+                },
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.snap_url) {
+                console.log("Snap Token:", data.snap_token);
+                console.log("Snap URL:", data.snap_url);
+
+                // Menampilkan tombol "Pay Now" dan mengarahkan ke Snap URL saat diklik
+                const payNowButton = document.getElementById('payNowButton');
+                payNowButton.style.display = 'inline-block';
+
+                payNowButton.addEventListener('click', function () {
+                    window.location.href = data.snap_url; // Redirect ke Snap URL Midtrans
+                });
+
+                Swal.fire({
+                    title: 'Payment Created',
+                    text: 'Your payment link has been generated.',
+                    icon: 'success',
+                    confirmButtonText: 'Proceed to Payment',
+                });
+            } else if (data.redirect_url) {
+                // Jika ada URL redirect dari backend, redirect ke halaman tersebut
+                Swal.fire({
+                    title: 'Payment Success',
+                    text: 'Your payment was successful. Redirecting...',
+                    icon: 'success',
+                    willClose: () => {
+                        window.location.href = data.redirect_url; // Redirect ke halaman konfirmasi
+                    }
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Payment Error',
+                    text: data.message || 'Unable to create payment.',
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error creating payment:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'An unexpected error occurred.',
+            });
+        });
+    } else {
+        Swal.fire({
+            icon: 'error',
+            title: 'No Booking Data',
+            text: 'No booking details found. Please try again.',
+            confirmButtonText: 'OK'
+        }).then(() => {
+            window.location.href = 'booking.html'; // Redirect ke halaman booking
+        });
+    }
+
+    // Event listener untuk tombol "Return to Home"
+    document.getElementById('returnHome').addEventListener('click', function () {
+        window.location.href = '../../dashboard.html'; // Redirect ke halaman dashboard
+    });
+});
+</script>
+
+</body>
+</html>

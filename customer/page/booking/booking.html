@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Checkout</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="description" content="Salon Booking">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="../../styles/bootstrap4/bootstrap.min.css">
+<link href="../../plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="../../styles/checkout.css">
+<link rel="stylesheet" type="text/css" href="../../styles/checkout_responsive.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<style>
+  /* Custom CSS to make Booking Details and Total Pembayaran side by side */
+  .checkout .row {
+    display: flex;
+    justify-content: space-between;
+  }
+  .checkout .col-lg-6 {
+    width: 48%;
+  }
+  .checkout .checkout_title {
+    font-size: 24px;
+    font-weight: bold;
+  }
+</style>
+</head>
+<body>
+
+<div class="super_container">
+	
+	<!-- Header -->
+	<header class="header">
+		<div class="header_inner d-flex flex-row align-items-center justify-content-start">
+			<div class="logo"><a href="#">CARE</a></div>
+			<nav class="main_nav">
+				<ul>
+					<li><a href="../../dashboard.php">Home</a></li>
+					<li><a href="riwayat.php">Riwayat</a></li>
+					<li><a href="profil.php">Profil</a></li>
+					<li>
+                        <a id="logout" class="btn btn-danger logout" href="#">Logout</a>
+
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</header>
+
+	<!-- Checkout -->
+	<div class="checkout">
+		<div class="container">
+			<div class="row">
+				<!-- Booking Details -->
+				<div class="col-lg-6">
+					<div class="billing">
+						<div class="checkout_title">Booking Details</div>
+						<div class="checkout_form_container">
+							<form action="booking.php" method="POST" id="checkout_form">
+								<input type="hidden" name="id_booking" value="">
+								<div class="form-group">
+									<label for="name">Nama Lengkap</label>
+									<input type="text" name="name" class="checkout_input" value="" readonly>
+								</div>
+								<div class="form-group">
+									<label for="phone">Nomor Telepon</label>
+									<input type="text" name="phone" class="checkout_input" value="" readonly>
+								</div>
+								<div class="form-group">
+									<label for="email">Email</label>
+									<input type="email" name="email" class="checkout_input" value="" readonly>
+								</div>
+
+								<div class="form-group">
+                                    <label for="date">Tanggal Booking</label>
+                                    <input type="date" name="date" class="checkout_input" required>
+                                </div>
+
+
+								<!-- Set payment status to Pending -->
+								<div class="form-group">
+									<label for="payment_status">Status Pembayaran</label>
+									<input type="text" name="payment_status" class="checkout_input" value="Pending" readonly>
+								</div>
+
+								<button id="bookingButton" type="submit" class="btn btn-primary">Place Booking</button>
+							</form>
+						</div>
+					</div>
+				</div>
+
+				<!-- Cart Details -->
+				<!-- Cart Details -->
+<div class="col-lg-6">
+    <div class="cart_details">
+        <div class="checkout_title">Total Pembayaran</div>
+        <div class="cart_total">
+            <ul>
+                <!-- Loop through selected services dynamically -->
+            </ul>
+        </div>
+
+        <!-- Total Price -->
+        <li class="d-flex flex-row align-items-start justify-content-start total_row">
+            <!-- <div class="cart_total_title">Total</div> -->
+            <div class="cart_total_price ml-auto"></div>
+        </li>
+
+        <!-- Payment Options -->
+        <div class="payment_options">
+            <div>
+                <input type="radio" id="radio_payment_1" name="regular_radio" class="regular_radio">
+                <label for="radio_payment_1">cash on delivery</label>
+            </div>
+            <div>
+                <input type="radio" id="radio_payment_2" name="regular_radio" class="regular_radio" checked>
+                <label for="radio_payment_2">paypal</label>
+                <div class="visa payment_option"><a href="#"><img src="images/visa.jpg" alt=""></a></div>
+                <div class="master payment_option"><a href="#"><img src="images/master.jpg" alt=""></a></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+			</div>
+		</div>
+	</div>
+	
+<script src="../../js/booking.js"></script>
+<script src="../../js/jquery-3.2.1.min.js"></script>
+<script src="../../styles/bootstrap4/popper.js"></script>
+<script src="../../styles/bootstrap4/bootstrap.min.js"></script>
+<script src="../../plugins/easing/easing.js"></script>
+<script src="../../plugins/parallax-js-master/parallax.min.js"></script>
+<script src="../../js/checkout_custom.js"></script>
+
+</body>
+</html>

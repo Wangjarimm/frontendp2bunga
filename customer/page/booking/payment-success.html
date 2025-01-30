@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Confirmation</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+
+    <h1>Payment Status</h1>
+    <p id="orderId"></p>
+    <p id="transactionStatus"></p>
+    <button id="returnHome">Return to Home</button>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Mengambil parameter dari URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const orderId = urlParams.get('order_id');
+        const statusCode = urlParams.get('status_code');
+        const transactionStatus = urlParams.get('transaction_status');
+        const action = urlParams.get('action');
+
+        // Tampilkan informasi transaksi
+        document.getElementById('orderId').textContent = "Order ID: " + orderId;
+        document.getElementById('transactionStatus').textContent = "Transaction Status: " + transactionStatus;
+
+        // Jika transaksi berhasil (settlement)
+        if (transactionStatus === 'settlement') {
+            Swal.fire({
+                title: 'Payment Successful',
+                text: 'Your payment has been successfully processed!',
+                icon: 'success',
+                confirmButtonText: 'Proceed to Dashboard'
+            }).then(() => {
+                // Redirect ke halaman dashboard setelah pembayaran berhasil
+                window.location.href = 'dashboard.html'; 
+            });
+        } else if (transactionStatus === 'pending') {
+            Swal.fire({
+                title: 'Payment Pending',
+                text: 'Your payment is still pending. Please wait.',
+                icon: 'info',
+                confirmButtonText: 'OK'
+            });
+        } else if (transactionStatus === 'failure') {
+            Swal.fire({
+                title: 'Payment Failed',
+                text: 'There was an issue with your payment. Please try again.',
+                icon: 'error',
+                confirmButtonText: 'Retry Payment'
+            }).then(() => {
+                window.location.href = 'payment-page.html'; // Arahkan kembali ke halaman pembayaran
+            });
+        }
+
+        // Event listener untuk tombol "Return to Home"
+        document.getElementById('returnHome').addEventListener('click', function () {
+            window.location.href = 'index.html'; // Redirect ke halaman beranda
+        });
+    });
+    </script>
+
+</body>
+</html>

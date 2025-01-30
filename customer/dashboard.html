@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Customer CARE</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="description" content="Salon Booking">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="styles/bootstrap4/bootstrap.min.css">
+<link href="plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+<link href="plugins/malihu-custom-scrollbar/jquery.mCustomScrollbar.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="plugins/jquery-ui-1.12.1.custom/jquery-ui.css">
+<link rel="stylesheet" type="text/css" href="styles/categories.css">
+<link rel="stylesheet" type="text/css" href="styles/categories_responsive.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<style>
+    .service-card {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 15px;
+        margin: 10px;
+        text-align: center;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        position: relative;
+    }
+    .service-card img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 5px;
+        margin-bottom: 10px;
+    }
+	.best_buy {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #f0f0f0; /* Warna abu-abu terang */
+    color: #333; /* Warna teks lebih gelap */
+    font-size: 18px;
+    font-weight: bold;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Bayangan halus */
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.best_buy:hover {
+    background: #ddd; /* Warna saat hover */
+    transform: scale(1.1); /* Sedikit efek zoom saat hover */
+}
+
+.best_buy.selected {
+    background: #000000; /* Warna hijau untuk pilihan */
+    color: #fff; /* Teks menjadi putih saat dipilih */
+}
+</style>
+</head>
+<body>
+
+<div class="super_container">
+    <!-- Header -->
+    <header class="header">
+        <div class="header_inner d-flex flex-row align-items-center justify-content-start">
+            <div class="logo"><a href="#">CARE</a></div>
+            <nav class="main_nav">
+                <ul>
+                    <li><a href="dashboard.php">Home</a></li>
+                    <li><a href="riwayat.php">Riwayat</a></li>
+                    <li><a href="profil.php">Profil</a></li>
+                    <li>
+                        <a id="logout" class="btn btn-danger logout" href="#">Logout</a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="burger_container d-flex flex-column align-items-center justify-content-around menu_mm">
+                <div></div><div></div><div></div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Services Section -->
+    <section class="services">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <h2 class="section_title">Our Services</h2>
+                    <p class="section_subtitle">Choose the best service that suits your needs</p>
+                </div>
+            </div>
+            <div class="row" id="service-list">
+                <!-- Layanan biasa akan tampil di sini -->
+            </div>
+
+            <!-- Layanan yang sering dipesan -->
+            <div class="row mt-5">
+                <div class="col-12 text-center">
+                    <h2 class="section_title">Layanan yang Sering Dipesan</h2>
+                    <p class="section_subtitle">Lihat layanan yang paling banyak dipilih oleh pelanggan lain</p>
+                </div>
+            </div>
+            <div class="row" id="most-ordered-service-list">
+                <!-- Layanan yang sering dipesan akan ditampilkan di sini -->
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-md-12 text-center">
+                    <button id="submit-services" class="btn btn-primary">Pesan Layanan</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scripts -->
+    <script src="js/dashboard.js"></script>
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <script src="styles/bootstrap4/popper.js"></script>
+    <script src="styles/bootstrap4/bootstrap.min.js"></script>
+    <script src="plugins/easing/easing.js"></script>
+    <script src="plugins/parallax-js-master/parallax.min.js"></script>
+    <script src="plugins/Isotope/isotope.pkgd.min.js"></script>
+    <script src="plugins/malihu-custom-scrollbar/jquery.mCustomScrollbar.js"></script>
+    <script src="plugins/jquery-ui-1.12.1.custom/jquery-ui.js"></script>
+    <script src="js/categories_custom.js"></script>
+</body>
+</html>

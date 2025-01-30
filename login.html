@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        body {
+            background-color: #ffe6f0;
+            font-family: Arial, sans-serif;
+        }
+
+        .login-container {
+            max-width: 400px;
+            margin: 50px auto;
+            background: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .login-header h1 {
+            font-size: 2rem;
+            color: #d63384;
+        }
+
+        .btn-pink {
+            background-color: #d63384;
+            color: #fff;
+            border: none;
+        }
+
+        .btn-pink:hover {
+            background-color: #c12e76;
+        }
+
+        .message {
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .message a {
+            color: #d63384;
+            text-decoration: none;
+        }
+
+        .message a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+
+<body>
+    <div class="login-container">
+        <div class="login-header">
+            <h1>Salon Login</h1>
+        </div>
+
+        <form action="" method="POST">
+            <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" class="form-control" id="username" name="username" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+
+            <div class="d-grid">
+                <button type="submit" class="btn btn-pink">Login</button>
+            </div>
+
+            <div class="message">
+                <p>Not registered? <a href="register.html">Create an account</a></p>
+            </div>
+
+            <div class="home-icon text-center">
+                <a href="index.html"><i class="fas fa-home"></i> Go to Homepage</a>
+            </div>
+
+            <div id="alert-container" class="alert-container"></div>
+
+        </form>
+    </div>
+
+    <script src="js/login.js"></script>
+</body>
+
+</html>

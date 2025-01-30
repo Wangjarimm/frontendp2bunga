@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Salon Point of Sale</title>
+    <link rel="stylesheet" href="css/pos.css" />
+    <script src="js/pos.js" defer></script>
+</head>
+<body>
+    <div class="pos-container">
+        <h1>Salon Point of Sale</h1>
+        <div class="service-list">
+            <h2>Choose Your Services</h2>
+            <div class="service-item">
+                <input type="checkbox" id="service1" data-price="50" />
+                <label for="service1">Haircut - $50</label>
+            </div>
+            <div class="service-item">
+                <input type="checkbox" id="service2" data-price="30" />
+                <label for="service2">Shampoo - $30</label>
+            </div>
+            <div class="service-item">
+                <input type="checkbox" id="service3" data-price="40" />
+                <label for="service3">Manicure - $40</label>
+            </div>
+            <div class="service-item">
+                <input type="checkbox" id="service4" data-price="60" />
+                <label for="service4">Pedicure - $60</label>
+            </div>
+            <div class="service-item">
+                <input type="checkbox" id="service5" data-price="100" />
+                <label for="service5">Hair Color - $100</label>
+            </div>
+        </div>
+        
+        <div class="total-section">
+            <h2>Total Amount: $<span id="totalPrice">0</span></h2>
+            <button id="checkoutButton" onclick="checkout()">Checkout</button>
+        </div>
+    </div>
+</body>
+</html>
