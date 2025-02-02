@@ -36,26 +36,68 @@ $(document).ready(function() {
             });
         },
         error: function() {
-            alert('Failed to fetch customer data.');
+            Swal.fire({
+                title: 'Error!',
+                text: 'Failed to fetch customer data.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
         }
     });
 });
 
 // Function to confirm deletion and delete customer
 function deleteCustomer(customerId) {
-    // Confirm deletion
-    if (confirm('Are you sure you want to delete this customer?')) {
-        // Call API to delete customer
-        $.ajax({
-            url: `http://localhost:8000/index.php/customer/${customerId}`, // API endpoint for deleting customer
-            method: 'DELETE',
-            success: function(response) {
-                alert('Customer deleted successfully!');
-                location.reload(); // Reload the page to reflect changes
-            },
-            error: function() {
-                alert('Failed to delete customer.');
-            }
-        });
-    }
+    // Confirm deletion using SweetAlert
+    Swal.fire({
+        title: 'Are you sure?',
+        text: 'Do you really want to delete this customer?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'No, cancel!',
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Call API to delete customer
+            $.ajax({
+                url: `http://localhost:8000/index.php/customer/${customerId}`, // API endpoint for deleting customer
+                method: 'DELETE',
+                success: function(response) {
+                    Swal.fire({
+                        title: 'Deleted!',
+                        text: 'Customer deleted successfully!',
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    }).then(() => {
+                        location.reload(); // Reload the page to reflect changes after user presses "OK"
+                    });
+                },
+                error: function() {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Failed to delete customer.',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            });
+        }
+    });
 }
+
+// Logout confirmation using SweetAlert
+document.getElementById("logout").addEventListener("click", function (event) {
+    event.preventDefault(); // Prevent default link behavior
+    Swal.fire({
+        title: "Apakah Anda yakin ingin logout?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Ya, logout",
+        cancelButtonText: "Batal",
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Redirect to the logout URL
+            window.location.href = "../index.html";
+        }
+    });
+});

@@ -10,7 +10,12 @@ $(document).ready(function () {
                 bookings = JSON.parse(response); // Parse the JSON response
             } catch (e) {
                 console.error('Failed to parse JSON:', e);
-                alert('Invalid API response format.');
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Invalid API response format.',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
                 return;
             }
 
@@ -49,7 +54,12 @@ $(document).ready(function () {
             });
         },
         error: function () {
-            alert('Failed to fetch booking data.');
+            Swal.fire({
+                title: 'Error!',
+                text: 'Failed to fetch booking data.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
         }
     });
 });
@@ -64,19 +74,54 @@ function formatRupiah(angka) {
 function deleteBooking(bookingId) {
     console.log("Booking ID to delete:", bookingId); // Debugging ID yang dikirim
     // Confirm deletion
-    if (confirm('Are you sure you want to delete this booking?')) {
-        // Call API to delete booking
-        $.ajax({
-            url: `http://localhost:8000/index.php/booking/${bookingId}`, // Pastikan ID ada di URL
-            method: 'DELETE',
-            success: function (response) {
-                alert('Booking deleted successfully!');
-                location.reload(); // Reload halaman untuk update tampilan
-            },
-            error: function () {
-                alert('Failed to delete booking.');
-            }
-        });
-    }
+    Swal.fire({
+        title: 'Are you sure you want to delete this booking?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, delete it',
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Call API to delete booking
+            $.ajax({
+                url: `http://localhost:8000/index.php/booking/${bookingId}`, // Pastikan ID ada di URL
+                method: 'DELETE',
+                success: function (response) {
+                    Swal.fire({
+                        title: 'Success!',
+                        text: 'Booking deleted successfully!',
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    }).then(() => {
+                        location.reload(); // Reload halaman untuk update tampilan
+                    });
+                },
+                error: function () {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Failed to delete booking.',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            });
+        }
+    });
 }
 
+// Logout confirmation using SweetAlert
+document.getElementById("logout").addEventListener("click", function (event) {
+    event.preventDefault(); // Prevent default link behavior
+    Swal.fire({
+        title: "Apakah Anda yakin ingin logout?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Ya, logout",
+        cancelButtonText: "Batal",
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Redirect to the logout URL
+            window.location.href = "../index.html";
+        }
+    });
+});

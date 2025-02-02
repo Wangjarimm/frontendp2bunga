@@ -1,0 +1,15 @@
+/* Pastikan card mengambil seluruh lebar */
+.card {
+    width: 100%;               /* Card akan mengisi lebar 100% */
+    max-width: 100%;           /* Jangan ada batasan lebar */
+    height: 350px;             /* Setel tinggi card agar tidak terlalu tinggi */
+  }
+  
+  /* Mengatur ukuran canvas */
+  #mostOrderedServicesChart {
+    width: 100% !important;      /* Canvas akan mengambil lebar penuh */
+    height: auto !important;     /* Tinggi akan disesuaikan otomatis */
+    max-width: 600px;            /* Tentukan lebar maksimal untuk menjaga proporsional */
+    margin: 0 auto;              /* Posisikan canvas di tengah */
+  }
+  

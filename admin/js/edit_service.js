@@ -37,15 +37,30 @@ $(document).ready(function () {
                     `;
                     $("#edit-form-container").html(form);
                 } else {
-                    alert("Service not found!");
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Service not found!',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
                 }
             },
             error: function () {
-                alert("Failed to fetch service data.");
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Failed to fetch service data.',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
             },
         });
     } else {
-        alert("No service ID provided!");
+        Swal.fire({
+            title: 'Error!',
+            text: 'No service ID provided!',
+            icon: 'error',
+            confirmButtonText: 'OK'
+        });
     }
 
     // Handle form submission
@@ -71,11 +86,22 @@ $(document).ready(function () {
             data: JSON.stringify(jsonData), // Send data in JSON format
             success: function (response) {
                 console.log("Update Response:", response); // Debugging to view the response
-                alert("Service updated successfully!");
-                window.location.href = "./services.html"; // Redirect to the services list page after a successful update
+                Swal.fire({
+                    title: 'Success!',
+                    text: 'Service updated successfully!',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    window.location.href = "./services.html"; // Redirect to the services list page after a successful update
+                });
             },
             error: function () {
-                alert("Failed to update service.");
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Failed to update service.',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
             },
         });
     });

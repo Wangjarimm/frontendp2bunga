@@ -40,7 +40,7 @@ $(document).ready(function () {
                         <div class="form-group">
                             <label for="payment_status">Payment Status</label>
                             <select id="payment_status" name="payment_status" class="form-control" required>
-                                <option value="Completed" ${booking.payment_status === "Completed" ? "selected" : ""}>   Completed</option>
+                                <option value="Completed" ${booking.payment_status === "Completed" ? "selected" : ""}>Completed</option>
                                 <option value="Pending" ${booking.payment_status === "Pending" ? "selected" : ""}>Pending</option>
                             </select>
                         </div>
@@ -49,15 +49,30 @@ $(document).ready(function () {
                     `;
                     $("#edit-form-container").html(form);
                 } else {
-                    alert("Booking not found!");
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Booking not found!',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
                 }
             },
             error: function () {
-                alert("Failed to fetch booking data.");
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Failed to fetch booking data.',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
             },
         });
     } else {
-        alert("No booking ID provided!");
+        Swal.fire({
+            title: 'Error!',
+            text: 'No booking ID provided!',
+            icon: 'error',
+            confirmButtonText: 'OK'
+        });
     }
 
     // Handle form submission
@@ -83,11 +98,22 @@ $(document).ready(function () {
             data: JSON.stringify(jsonData),  // Send data as JSON
             success: function (response) {
                 console.log("Update Response:", response);  // Debugging to see the response
-                alert("Booking updated successfully!");
-                window.location.href = "./booking.html";  // Redirect to booking list after update
+                Swal.fire({
+                    title: 'Success!',
+                    text: 'Booking updated successfully!',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    window.location.href = "./booking.html";  // Redirect to booking list after update
+                });
             },
             error: function () {
-                alert("Failed to update booking.");
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Failed to update booking.',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
             },
         });
     });
