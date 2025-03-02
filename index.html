@@ -315,8 +315,8 @@
             <svg width="38" height="38" viewBox="0 0 24 24" class="svg-color">
               <use xlink:href="#calendar"></use>
             </svg>
-            <h4 class="element-title text-capitalize my-3">Book An Appointment</h4>
-            <p>Easily book your appointment online and enjoy personalized beauty services at your convenience.</p>
+            <h4 class="element-title text-capitalize my-3">Total Bookings Today</h4>
+            <p id="totalBookings">Loading...</p>
           </div>
         </div>
         <div class="col-md-3 text-center" data-aos="fade-in" data-aos-delay="600">
@@ -324,22 +324,14 @@
             <svg width="38" height="38" viewBox="0 0 24 24" class="svg-color">
               <use xlink:href="#gift"></use>
             </svg>
-            <h4 class="element-title text-capitalize my-3">Special package</h4>
-            <p>Our special package combines premium beauty services at a discounted rate for a complete, luxurious experience</p>
-          </div>
-        </div>
-        <div class="col-md-3 text-center" data-aos="fade-in" data-aos-delay="900">
-          <div class="py-5">
-            <svg width="38" height="38" viewBox="0 0 24 24" class="svg-color">
-              <use xlink:href="#arrow-cycle"></use>
-            </svg>
-            <h4 class="element-title text-capitalize my-3">Various locations</h4>
-            <p>Our salon is conveniently located in multiple locations to serve you better!</p>
+            <h4 class="element-title text-capitalize my-3">Remaining Slots</h4>
+            <p id="remainingSlots">Loading...</p>
           </div>
         </div>
       </div>
     </div>
   </section>
+  
   
 
   <section id="new-arrival" class="new-arrival product-carousel position-relative open-up" data-aos="zoom-out">
@@ -734,6 +726,7 @@
     crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
   <script src="js/script.js"></script>
+  <script src="js/index.js"></script>
 </body>
 
 </html>

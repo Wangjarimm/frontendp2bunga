@@ -30,7 +30,11 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
-    const bookingData = JSON.parse(localStorage.getItem('latestBooking'));
+    const urlParams = new URLSearchParams(window.location.search);
+    const bookingId = urlParams.get("booking_id");
+
+    const bookingHistory = JSON.parse(localStorage.getItem('bookingHistory')) || [];
+    const bookingData = bookingHistory.find(booking => booking.booking_id === bookingId);
 
     if (bookingData) {
         document.getElementById('bookingId').textContent = bookingData.booking_id;
@@ -39,33 +43,35 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById('customerEmail').textContent = bookingData.email;
         document.getElementById('totalPrice').textContent = 'Rp. ' + bookingData.total_price.toLocaleString('id-ID');
 
-        // Tampilkan tanggal booking
+        // Ambil tanggal booking
         const bookingDate = new Date(bookingData.date);
         document.getElementById('bookingDate').textContent = bookingDate.toLocaleDateString('id-ID');
 
-        // Hitung Payment Deadline (1 hari dari waktu saat ini)
-        const paymentDeadline = new Date(); // Waktu saat ini
-        paymentDeadline.setDate(paymentDeadline.getDate() + 1); // Tambahkan 1 hari
+        // Ambil tanggal hari ini
+        const now = new Date();
+        const todayStr = now.toISOString().split('T')[0]; // Format YYYY-MM-DD
+        const bookingDateStr = bookingDate.toISOString().split('T')[0]; // Format YYYY-MM-DD
+        let paymentDeadline;
 
-        // Format tanggal dengan format Indonesia
-        const paymentDeadlineDate = paymentDeadline.toLocaleDateString('id-ID');
+        if (bookingDateStr === todayStr && bookingData.time) {
+            // Jika booking dilakukan hari ini, gunakan waktu booking
+            const [hours, minutes] = bookingData.time.split(':').map(Number);
+            paymentDeadline = new Date();
+            paymentDeadline.setHours(hours, minutes, 0);
+            paymentDeadline.setTime(paymentDeadline.getTime() + (60 * 60 * 1000)); // Tambah 1 jam
+        } else {
+            // Jika booking untuk hari lain, payment deadline adalah sehari sebelum booking
+            paymentDeadline = new Date(bookingDate);
+            paymentDeadline.setDate(bookingDate.getDate() - 1); // Sehari sebelum booking
+            paymentDeadline.setHours(23, 59, 59); // Set ke akhir hari
+        }
 
-        // Format waktu dengan zona waktu Asia/Jakarta
-        const timeOptions = {
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            hour12: false,
-            timeZone: 'Asia/Jakarta' // WIB
-        };
-        const paymentDeadlineTime = new Intl.DateTimeFormat('id-ID', timeOptions).format(paymentDeadline);
-
-        // Gabungkan tanggal dan waktu
-        const paymentDeadlineFormatted = `${paymentDeadlineDate} ${paymentDeadlineTime}`;
+        // Format deadline dalam zona waktu Jakarta
+        const paymentDeadlineFormatted = paymentDeadline.toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' });
         document.getElementById('paymentDeadline').textContent = paymentDeadlineFormatted;
 
-        // Fetch API untuk membuat payment
-        fetch('https://a415-182-253-194-14.ngrok-free.app/index.php/payment/create', {
+        // Panggil API pembayaran Midtrans
+        fetch('https://7686-182-253-124-118.ngrok-free.app/index.php/payment/create', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -74,7 +80,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 booking_id: bookingData.booking_id,
                 status: "pending",
                 gross_amount: bookingData.total_price,
-                payment_type: "credit_card", // Sesuaikan tipe pembayaran
+                payment_type: "credit_card",
                 customer: {
                     name: bookingData.name,
                     email: bookingData.email,
@@ -88,35 +94,24 @@ document.addEventListener("DOMContentLoaded", function () {
                 console.log("Snap Token:", data.snap_token);
                 console.log("Snap URL:", data.snap_url);
 
-                // Menampilkan tombol "Pay Now" dan mengarahkan ke Snap URL saat diklik
                 const payNowButton = document.getElementById('payNowButton');
                 payNowButton.style.display = 'inline-block';
 
                 payNowButton.addEventListener('click', function () {
-                    window.location.href = data.snap_url; // Redirect ke Snap URL Midtrans
+                    window.location.href = data.snap_url;
                 });
 
                 Swal.fire({
                     title: 'Payment Created',
-                    text: 'Your payment link has been generated.',
+                    text: 'Click "Pay Now" to proceed.',
                     icon: 'success',
-                    confirmButtonText: 'Proceed to Payment',
-                });
-            } else if (data.redirect_url) {
-                // Jika ada URL redirect dari backend, redirect ke halaman tersebut
-                Swal.fire({
-                    title: 'Payment Success',
-                    text: 'Your payment was successful. Redirecting...',
-                    icon: 'success',
-                    willClose: () => {
-                        window.location.href = data.redirect_url; // Redirect ke halaman konfirmasi
-                    }
+                    confirmButtonText: 'OK',
                 });
             } else {
                 Swal.fire({
                     icon: 'error',
                     title: 'Payment Error',
-                    text: data.message || 'Unable to create payment.',
+                    text: 'Unable to create payment.',
                 });
             }
         })
@@ -132,18 +127,19 @@ document.addEventListener("DOMContentLoaded", function () {
         Swal.fire({
             icon: 'error',
             title: 'No Booking Data',
-            text: 'No booking details found. Please try again.',
+            text: 'Invalid or missing booking details.',
             confirmButtonText: 'OK'
         }).then(() => {
-            window.location.href = 'booking.html'; // Redirect ke halaman booking
+            window.location.href = 'booking.html';
         });
     }
 
-    // Event listener untuk tombol "Return to Home"
     document.getElementById('returnHome').addEventListener('click', function () {
-        window.location.href = '../../dashboard.html'; // Redirect ke halaman dashboard
+        window.location.href = '../../dashboard.html';
     });
 });
+
+
 </script>
 
 </body>

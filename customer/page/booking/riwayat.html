@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Riwayat Booking</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="../../styles/bootstrap4/bootstrap.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  </head>
+  <body>
+    <div class="container mt-5">
+      <h2 class="text-center">Riwayat Booking</h2>
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>Booking ID</th>
+            <th>Nama</th>
+            <th>Tanggal Booking</th>
+            <th>Status</th>
+            <th>Layanan</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="booking-history-body">
+          <!-- Data booking akan ditampilkan di sini -->
+        </tbody>
+      </table>
+      <a href="../../dashboard.html" class="btn btn-primary">Kembali ke Home</a>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", async function () {
+        console.log(
+          "LocalStorage Data (Raw):",
+          localStorage.getItem("customerData")
+        );
+
+        const bookingTable = document.getElementById("booking-history-body");
+
+        // Ambil data customer dari localStorage
+        const customerData = JSON.parse(localStorage.getItem("customerData"));
+
+        console.log("Parsed Customer Data:", customerData); // Log isi customerData
+
+        if (!customerData) {
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: "User belum login. Silakan login terlebih dahulu.",
+          }).then(() => {
+            window.location.href = "login.html"; // Redirect ke halaman login
+          });
+          return;
+        }
+
+        const userId = customerData.id; // Ambil ID dari customerdata
+        console.log("User ID:", userId); // Log user ID untuk memastikan nilainya
+
+        // Fungsi untuk mengambil data booking dari API
+        async function fetchBookingHistory() {
+          try {
+            const response = await fetch(
+              `http://localhost:8000/index.php/reservation/user/${userId}`
+            );
+            if (!response.ok) {
+              throw new Error("Gagal mengambil data booking.");
+            }
+
+            const data = await response.json();
+            console.log("Booking History (From API):", data);
+
+            displayBookings(data); // Tampilkan hasil ke tabel
+          } catch (error) {
+            console.error("Error:", error);
+            Swal.fire({
+              icon: "error",
+              title: "Error",
+              text: "Gagal mengambil data booking. Silakan coba lagi nanti.",
+            });
+          }
+        }
+
+        // Fungsi untuk menampilkan data booking di tabel
+        function displayBookings(bookings) {
+          bookingTable.innerHTML = ""; // Kosongkan tabel sebelum diisi ulang
+
+          if (!bookings || bookings.length === 0) {
+            bookingTable.innerHTML = `
+                        <tr>
+                            <td colspan="7" class="text-center">Belum ada riwayat booking</td>
+                        </tr>`;
+            return;
+          }
+
+          bookings.forEach((booking, index) => {
+            let formattedDate = new Date(booking.date).toLocaleDateString(
+              "id-ID",
+              {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric",
+              }
+            );
+
+            let serviceList = booking.services
+              .map(
+                (service) =>
+                  `<li>${service.nama_service} - Rp ${service.harga}</li>`
+              )
+              .join("");
+
+            let bayarButton =
+              booking.payment_status.toLowerCase() === "pending"
+                ? `<a href="confirmation.html?booking_id=${booking.id_booking}" class="btn btn-success btn-sm">Bayar</a>`
+                : `<span class="text-muted">Sudah Dibayar</span>`;
+
+            let cancelButton =
+              booking.payment_status.toLowerCase() === "pending"
+                ? `<button class="btn btn-danger btn-sm cancel-booking" data-id="${booking.id_booking}">Cancel</button>`
+                : `<span class="text-muted">Tidak bisa dibatalkan</span>`;
+
+            let row = `
+                        <tr>
+                            <td>${index + 1}</td>
+                            <td>${booking.id_booking}</td>
+                            <td>${booking.username}</td>
+                            <td>${formattedDate}</td>
+                            <td>${booking.payment_status}</td>
+                            <td><ul>${serviceList}</ul></td>
+                            <td>${bayarButton} ${cancelButton}</td>
+                        </tr>
+                    `;
+
+            bookingTable.innerHTML += row;
+          });
+
+          // Tambahkan event listener untuk tombol Cancel
+          document.querySelectorAll(".cancel-booking").forEach((button) => {
+            button.addEventListener("click", function () {
+              const bookingId = this.getAttribute("data-id");
+
+              Swal.fire({
+                title: "Konfirmasi Pembatalan",
+                text: "Apakah Anda yakin ingin membatalkan booking ini?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Ya, Batalkan!",
+                cancelButtonText: "Tidak",
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  cancelBooking(bookingId);
+                }
+              });
+            });
+          });
+        }
+
+        // Fungsi untuk membatalkan booking (jika dibutuhkan)
+        // Fungsi untuk membatalkan dan menghapus booking
+        async function cancelBooking(bookingId) {
+          try {
+            const response = await fetch(
+              `http://localhost:8000/index.php/booking/${bookingId}`,
+              {
+                method: "DELETE",
+                headers: { "Content-Type": "application/json" },
+              }
+            );
+
+            if (!response.ok) {
+              throw new Error("Gagal membatalkan booking.");
+            }
+
+            Swal.fire({
+              icon: "success",
+              title: "Booking Dibatalkan",
+              text: "Booking berhasil dibatalkan dan dihapus dari database.",
+              confirmButtonText: "OK",
+            }).then(() => {
+              fetchBookingHistory(); // Refresh daftar booking setelah pembatalan
+            });
+          } catch (error) {
+            console.error("Error:", error);
+            Swal.fire({
+              icon: "error",
+              title: "Error",
+              text: "Gagal membatalkan booking. Silakan coba lagi nanti.",
+            });
+          }
+        }
+
+        // Panggil fungsi untuk mengambil data booking dari API
+        fetchBookingHistory();
+      });
+    </script>
+  </body>
+</html>
